@@ -16,6 +16,7 @@ namespace AppointmentIngestion.Services.Extensions
             return services
                  .AddSingleton<IAppointmentRepository, InMemoryAppointmentRepository>()
                  .AddScoped<IAppointmentIngestionService, AppointmentIngestionService>()
+                 .AddSingleton<IDateTimeProvider, SystemDateTimeProvider>()
                  .AddScoped<IValidator<AppointmentRequestDto>, AppointmentRequestValidator>();
         }
     }

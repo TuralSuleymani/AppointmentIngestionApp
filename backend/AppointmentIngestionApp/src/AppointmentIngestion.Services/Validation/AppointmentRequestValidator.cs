@@ -1,12 +1,15 @@
-﻿using AppointmentIngestion.Services.DTOs;
+﻿using AppointmentIngestion.Services.Contracts;
+using AppointmentIngestion.Services.DTOs;
 using FluentValidation;
 
 namespace AppointmentIngestion.Services.Validation
 {
     public class AppointmentRequestValidator : AbstractValidator<AppointmentRequestDto>
     {
-        public AppointmentRequestValidator()
+        private readonly IDateTimeProvider _datetimeProvider;
+        public AppointmentRequestValidator(IDateTimeProvider datetimeProvider)
         {
+            _datetimeProvider = datetimeProvider;
             RuleFor(x => x.ClientName)
                 .NotEmpty().WithMessage("ClientName is required.");
 
@@ -24,7 +27,7 @@ namespace AppointmentIngestion.Services.Validation
         }
 
         private bool BeAtLeast5MinutesInFuture(DateTime datetime)
-            => datetime.ToUniversalTime() >= DateTime.UtcNow.AddMinutes(5);
+            => datetime.ToUniversalTime() >= _datetimeProvider.UtcNow.AddMinutes(5);
 
         private bool StartOnHourOrHalfHour(DateTime datetime)
             => datetime.Minute == 0 || datetime.Minute == 30;
