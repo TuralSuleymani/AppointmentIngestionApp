@@ -5,7 +5,7 @@
     <Project Path="src/AppointmentIngestion.Services/AppointmentIngestion.Services.csproj" />
   </Folder>
   <Folder Name="/tests/">
-    <Project Path="AppointmentIngestion.Tests.Data/AppointmentIngestion.Tests.Data.csproj" />
+    <Project Path="tests/AppointmentIngestion.Tests.Data/AppointmentIngestion.Tests.Data.csproj" />
     <Project Path="tests/AppointmentIngestion.Tests.Unit/AppointmentIngestion.Tests.Unit.csproj" />
   </Folder>
 </Solution>
