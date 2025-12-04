@@ -6,4 +6,15 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="automapper" Version="16.0.0" />
+    <PackageReference Include="csharpfunctionalextensions" Version="3.6.0" />
+    <PackageReference Include="FluentValidation" Version="12.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\AppointmentIngestion.Common\AppointmentIngestion.Common.csproj" />
+    <ProjectReference Include="..\AppointmentIngestion.Repositories\AppointmentIngestion.Repositories.csproj" />
+  </ItemGroup>
+
 </Project>

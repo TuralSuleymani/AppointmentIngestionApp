@@ -1,4 +1,6 @@
 
+using AppointmentIngestion.Services.Mapping;
+
 namespace AppointmentIngestion.Api
 {
     public class Program
@@ -14,6 +16,7 @@ namespace AppointmentIngestion.Api
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.Services.AddAutoMapper(typeof(AppointmentProfile).Assembly);
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
