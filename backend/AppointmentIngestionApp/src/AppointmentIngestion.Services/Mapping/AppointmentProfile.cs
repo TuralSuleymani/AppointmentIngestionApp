@@ -13,7 +13,7 @@ namespace AppointmentIngestion.Services.Mapping
             CreateMap<AppointmentRequestDto, Appointment>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
                 .ForMember(dest => dest.AppointmentTime,
-                    opt => opt.MapFrom(src => src.AppointmentTime.Value.NormalizeToUtc()))
+                    opt => opt.MapFrom(src => src.AppointmentTime.NormalizeToUtc()))
                 .ForMember(dest => dest.ServiceDurationMinutes,
                     opt => opt.MapFrom(src => src.ServiceDurationMinutes ?? 30));
 

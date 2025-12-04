@@ -9,9 +9,9 @@ namespace AppointmentIngestion.API.Controllers;
 [Route("api/[controller]")]
 public class AppointmentsController : BaseController
 {
-    private readonly IAppointmentService _service;
+    private readonly IAppointmentIngestionService _service;
 
-    public AppointmentsController(IAppointmentService service
+    public AppointmentsController(IAppointmentIngestionService service
         , ILogger<AppointmentsController> logger)
         : base(logger)
     {

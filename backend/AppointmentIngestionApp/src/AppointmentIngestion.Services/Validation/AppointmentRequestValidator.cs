@@ -23,10 +23,10 @@ namespace AppointmentIngestion.Services.Validation
                 .WithMessage("ServiceDurationMinutes must be positive.");
         }
 
-        private bool BeAtLeast5MinutesInFuture(DateTime? datetime)
-            => datetime != null && datetime.Value.ToUniversalTime() >= DateTime.UtcNow.AddMinutes(5);
+        private bool BeAtLeast5MinutesInFuture(DateTime datetime)
+            => datetime.ToUniversalTime() >= DateTime.UtcNow.AddMinutes(5);
 
-        private bool StartOnHourOrHalfHour(DateTime? datetime)
-            => datetime != null && (datetime.Value.Minute == 0 || datetime.Value.Minute == 30);
+        private bool StartOnHourOrHalfHour(DateTime datetime)
+            => datetime.Minute == 0 || datetime.Minute == 30;
     }
 }

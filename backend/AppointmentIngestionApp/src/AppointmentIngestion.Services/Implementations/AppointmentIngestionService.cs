@@ -9,13 +9,13 @@ using FluentValidation;
 
 namespace AppointmentIngestion.Services.Implementations;
 
-public class AppointmentService : IAppointmentService
+public class AppointmentIngestionService : IAppointmentIngestionService
 {
     private readonly IAppointmentRepository _repository;
     private readonly IValidator<AppointmentRequestDto> _validator;
     private readonly IMapper _mapper;
 
-    public AppointmentService(
+    public AppointmentIngestionService(
         IAppointmentRepository repository,
         IValidator<AppointmentRequestDto> validator,
         IMapper mapper)

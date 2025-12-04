@@ -4,7 +4,7 @@ using CSharpFunctionalExtensions;
 
 namespace AppointmentIngestion.Services.Contracts
 {
-    public interface IAppointmentService
+    public interface IAppointmentIngestionService
     {
         Task<Result<int,DomainError>> IngestAsync(AppointmentRequestDto request);
         Task<Result<IReadOnlyList<AppointmentResponseDto>,DomainError>> GetAllAsync();
