@@ -25,7 +25,7 @@ public class AppointmentIngestionService : IAppointmentIngestionService
         _mapper = mapper;
     }
 
-    public async Task<Result<int, DomainError>> IngestAsync(AppointmentRequestDto request)
+    public async Task<Result<int, IDomainError>> IngestAsync(AppointmentRequestDto request)
     {
         var validation = await _validator.ValidateAsync(request);
 
@@ -35,7 +35,7 @@ public class AppointmentIngestionService : IAppointmentIngestionService
                 .Select(e => e.ErrorMessage)
                 .ToList();
 
-            return Result.Failure<int, DomainError>(
+            return Result.Failure<int, IDomainError>(
                 DomainError.Validation("Validation Failed.", errors)
             );
         }
@@ -43,25 +43,25 @@ public class AppointmentIngestionService : IAppointmentIngestionService
         var appointment = _mapper.Map<Appointment>(request);
 
         var saved = await _repository.AddAsync(appointment);
-        return Result.Success<int, DomainError>(saved.Id);
+        return Result.Success<int, IDomainError>(saved.Id);
     }
 
-    public async Task<Result<IReadOnlyList<AppointmentResponseDto>, DomainError>> GetAllAsync()
+    public async Task<Result<IReadOnlyList<AppointmentResponseDto>, IDomainError>> GetAllAsync()
     {
         var items = await _repository.GetAllAsync();
 
         var dtos = _mapper.Map<IReadOnlyList<AppointmentResponseDto>>(items);
 
-        return Result.Success<IReadOnlyList<AppointmentResponseDto>, DomainError>(dtos);
+        return Result.Success<IReadOnlyList<AppointmentResponseDto>, IDomainError>(dtos);
     }
 
-    public async Task<Result<AppointmentResponseDto, DomainError>> GetByIdAsync(int id)
+    public async Task<Result<AppointmentResponseDto, IDomainError>> GetByIdAsync(int id)
     {
         var entity = await _repository.GetByIdAsync(id);
 
         if (entity is null)
         {
-            return Result.Failure<AppointmentResponseDto, DomainError>(
+            return Result.Failure<AppointmentResponseDto, IDomainError>(
                 DomainError.NotFound($"Appointment with ID {id} was not found.")
             );
         }

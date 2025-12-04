@@ -10,7 +10,7 @@ using AutoMapper;
 using FluentAssertions;
 using NSubstitute;
 
-namespace AppointmentIngestion.Tests.Unit.Services
+namespace AppointmentIngestion.Tests.Unit.ServiceTests
 {
     public class AppointmentIngestionServiceTests
     {
@@ -40,7 +40,7 @@ namespace AppointmentIngestion.Tests.Unit.Services
         public async Task IngestAsync_WhenClientNameIsEmpty_ShouldFail()
         {
             //Arrange
-            var request = AppointmentRequestDtoFactory.Create(clientName: "");
+            var request = AppointmentRequestDtoFactory.Create(_datetimeProvider, clientName: "");
 
             //Act
             var result = await _service.IngestAsync(request);
@@ -57,7 +57,7 @@ namespace AppointmentIngestion.Tests.Unit.Services
         public async Task IngestAsync_WhenAppointmentTimeIsNotValid_ShouldFail(DateTime appointment)
         {
             //Arrange
-            var request = AppointmentRequestDtoFactory.Create(appointmentTime: appointment);
+            var request = AppointmentRequestDtoFactory.Create(_datetimeProvider, appointmentTime: appointment);
 
             //Act
             var result = await _service.IngestAsync(request);
@@ -77,7 +77,7 @@ namespace AppointmentIngestion.Tests.Unit.Services
         public async Task IngestAsync_WhenAppointmentNot5MinutesInFuture_ShouldFail(int minute)
         {
             //Arrange
-            var request = AppointmentRequestDtoFactory.Create(appointmentTime: GetDatetimeProvider().UtcNow.AddMinutes(minute));
+            var request = AppointmentRequestDtoFactory.Create(_datetimeProvider, appointmentTime: GetDatetimeProvider().UtcNow.AddMinutes(minute));
 
             //Act
             var result = await _service.IngestAsync(request);
@@ -96,7 +96,7 @@ namespace AppointmentIngestion.Tests.Unit.Services
         public async Task IngestAsync_WhenServiceDurationIsNegative_ShouldFail(int sdim)
         {
             //Arrange
-            var request = AppointmentRequestDtoFactory.Create(serviceDurationMinutes: sdim);
+            var request = AppointmentRequestDtoFactory.Create(_datetimeProvider, serviceDurationMinutes: sdim);
 
             //Arrange
             var result = await _service.IngestAsync(request);
@@ -114,11 +114,7 @@ namespace AppointmentIngestion.Tests.Unit.Services
             //Arrange
             int id = AppointmentData.ValidAppointmentId;
 
-            var validTime = _datetimeProvider.UtcNow.AddMinutes(10)
-                .AddSeconds(-_datetimeProvider.UtcNow.AddMinutes(10).Second)
-                .AddMinutes(-(_datetimeProvider.UtcNow.AddMinutes(10).Minute % 30)); // normalize to 0 or 30
-
-            var request = AppointmentRequestDtoFactory.Create(appointmentTime: validTime);
+            var request = AppointmentRequestDtoFactory.Create(_datetimeProvider);
 
             var entity = new Appointment { Id = id };
 

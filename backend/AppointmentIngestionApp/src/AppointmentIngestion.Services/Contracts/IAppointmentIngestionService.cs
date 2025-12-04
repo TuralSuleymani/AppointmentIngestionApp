@@ -6,8 +6,8 @@ namespace AppointmentIngestion.Services.Contracts
 {
     public interface IAppointmentIngestionService
     {
-        Task<Result<int,DomainError>> IngestAsync(AppointmentRequestDto request);
-        Task<Result<IReadOnlyList<AppointmentResponseDto>,DomainError>> GetAllAsync();
-        Task<Result<AppointmentResponseDto,DomainError>> GetByIdAsync(int id);
+        Task<Result<int, IDomainError>> IngestAsync(AppointmentRequestDto request);
+        Task<Result<IReadOnlyList<AppointmentResponseDto>, IDomainError>> GetAllAsync();
+        Task<Result<AppointmentResponseDto, IDomainError>> GetByIdAsync(int id);
     }
 }

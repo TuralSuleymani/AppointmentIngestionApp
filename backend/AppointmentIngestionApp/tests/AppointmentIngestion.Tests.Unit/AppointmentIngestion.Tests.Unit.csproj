@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\AppointmentIngestion.Api\AppointmentIngestion.Api.csproj" />
     <ProjectReference Include="..\..\src\AppointmentIngestion.Services\AppointmentIngestion.Services.csproj" />
     <ProjectReference Include="..\AppointmentIngestion.Tests.Data\AppointmentIngestion.Tests.Data.csproj" />
   </ItemGroup>
