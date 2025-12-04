@@ -11,19 +11,19 @@ namespace AppointmentIngestion.Services.Validation
         {
             _datetimeProvider = datetimeProvider;
             RuleFor(x => x.ClientName)
-                .NotEmpty().WithMessage("ClientName is required.");
+                .NotEmpty().WithMessage(ValidationErrors.ClientNameRequired);
 
             RuleFor(x => x.AppointmentTime)
-                .NotNull().WithMessage("AppointmentTime is required.")
+                .NotNull().WithMessage(ValidationErrors.AppointmentTimeRequired)
                 .Must(BeAtLeast5MinutesInFuture)
-                .WithMessage("Appointment time must be at least 5 minutes in the future.")
+                .WithMessage(ValidationErrors.AppointmentTimeFuture)
                 .Must(StartOnHourOrHalfHour)
-                .WithMessage("Appointment must start on the hour or half-hour.");
+                .WithMessage(ValidationErrors.AppointmentTimeSlot);
 
             RuleFor(x => x.ServiceDurationMinutes)
                 .GreaterThan(0)
                 .When(x => x.ServiceDurationMinutes.HasValue)
-                .WithMessage("ServiceDurationMinutes must be positive.");
+                .WithMessage(ValidationErrors.ServiceDurationPositive);
         }
 
         private bool BeAtLeast5MinutesInFuture(DateTime datetime)

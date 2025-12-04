@@ -47,7 +47,7 @@ namespace AppointmentIngestion.Tests.Unit.Services
 
             //Assert
             result.IsFailure.Should().BeTrue();
-            result.Error.Errors.Should().Contain("ClientName is required.");
+            result.Error.Errors.Should().Contain(ValidationErrors.ClientNameRequired);
 
             await _repository.DidNotReceive().AddAsync(Arg.Any<Appointment>());
         }
@@ -64,7 +64,7 @@ namespace AppointmentIngestion.Tests.Unit.Services
 
             //Assert
             result.IsFailure.Should().BeTrue();
-            result.Error.Errors.Should().Contain("Appointment must start on the hour or half-hour.");
+            result.Error.Errors.Should().Contain(ValidationErrors.AppointmentTimeSlot);
 
             await _repository.DidNotReceive().AddAsync(Arg.Any<Appointment>());
         }
@@ -84,7 +84,7 @@ namespace AppointmentIngestion.Tests.Unit.Services
 
             //Assert
             result.IsFailure.Should().BeTrue();
-            result.Error.Errors.Should().Contain("Appointment time must be at least 5 minutes in the future.");
+            result.Error.Errors.Should().Contain(ValidationErrors.AppointmentTimeFuture);
 
             await _repository.DidNotReceive().AddAsync(Arg.Any<Appointment>());
         }
@@ -103,7 +103,7 @@ namespace AppointmentIngestion.Tests.Unit.Services
 
             //Arrange
             result.IsFailure.Should().BeTrue();
-            result.Error.Errors.Should().Contain("ServiceDurationMinutes must be positive.");
+            result.Error.Errors.Should().Contain(ValidationErrors.ServiceDurationPositive);
 
             await _repository.DidNotReceive().AddAsync(Arg.Any<Appointment>());
         }
@@ -149,7 +149,7 @@ namespace AppointmentIngestion.Tests.Unit.Services
 
             // Assert
             result.IsFailure.Should().BeTrue();
-            result.Error.ErrorMessage.Should().Be($"Appointment with ID {id} was not found.");
+            result.Error.ErrorMessage.Should().Be(ValidationErrors.AppointmentNotFound(id));
         }
 
         [Fact]
