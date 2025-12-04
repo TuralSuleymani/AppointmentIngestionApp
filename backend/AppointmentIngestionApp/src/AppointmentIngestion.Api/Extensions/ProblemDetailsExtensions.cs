@@ -59,10 +59,11 @@ namespace AppointmentIngestion.Api.Extensions
         {
             if (errors != null && errors.Any())
             {
-                StringBuilder errorList = new StringBuilder();
-                errorList.AppendJoin(",", errors);
+                string errorList = new StringBuilder()
+                                         .AppendJoin(",", errors)
+                                             .ToString();
 
-                return detailsFactory.CreateProblemDetails(context, statusCode: statusCode, detail: errorList.ToString());
+                return detailsFactory.CreateProblemDetails(context, statusCode: statusCode, detail: errorList);
             }
             else
                 return detailsFactory.CreateProblemDetails(context, statusCode: statusCode, detail: message);
