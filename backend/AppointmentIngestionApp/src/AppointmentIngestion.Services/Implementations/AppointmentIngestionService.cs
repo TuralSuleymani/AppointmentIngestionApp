@@ -36,7 +36,7 @@ public class AppointmentIngestionService : IAppointmentIngestionService
                 .ToList();
 
             return Result.Failure<int, IDomainError>(
-                DomainError.Validation("Validation Failed.", errors)
+                DomainError.Validation(errors: errors)
             );
         }
 

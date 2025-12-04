@@ -20,11 +20,24 @@ namespace AppointmentIngestion.Tests.Unit.ControllerTests
         private readonly ILogger<AppointmentsController> _logger;
         private readonly AppointmentsController _controller;
         private readonly int _badRequestStatusCode = 400;
+
         public AppointmentsControllerTests()
         {
             _service = Substitute.For<IAppointmentIngestionService>();
             _logger = Substitute.For<ILogger<AppointmentsController>>();
 
+            _controller = new AppointmentsController(_service, _logger)
+            {
+                ControllerContext = new ControllerContext
+                {
+                    HttpContext = new DefaultHttpContext()
+                },
+                ProblemDetailsFactory = GetProblemDetailsFactory()
+            };
+        }
+
+        private static ProblemDetailsFactory GetProblemDetailsFactory()
+        {
             var problemDetailsFactory = Substitute.For<ProblemDetailsFactory>();
             problemDetailsFactory.CreateProblemDetails(
                 Arg.Any<HttpContext>(),
@@ -38,14 +51,7 @@ namespace AppointmentIngestion.Tests.Unit.ControllerTests
                     Status = callInfo.ArgAt<int?>(1),
                     Detail = callInfo.ArgAt<string>(4)
                 });
-            _controller = new AppointmentsController(_service, _logger)
-            {
-                ControllerContext = new ControllerContext
-                {
-                    HttpContext = new DefaultHttpContext()
-                },
-                ProblemDetailsFactory = problemDetailsFactory
-            };
+            return problemDetailsFactory;
         }
 
         [Fact]
@@ -80,11 +86,14 @@ namespace AppointmentIngestion.Tests.Unit.ControllerTests
             var request = new AppointmentRequestDto();
 
             var error = Substitute.For<IDomainError>();
-            error.ErrorType.Returns(ErrorType.Validation);
-            error.ErrorMessage.Returns("Invalid time");
-            error.Errors.Returns(new List<string> { ValidationErrors.AppointmentTimeSlot });
+            var validationError = ErrorType.Unexpected;
 
-            _service.IngestAsync(request).Returns(Result.Failure<int, IDomainError>(error));
+            error.ErrorType.Returns(validationError);
+            error.ErrorMessage.Returns(validationError.Name);
+            error.Errors.Returns([ValidationErrors.AppointmentTimeSlot]);
+
+            _service.IngestAsync(request)
+                        .Returns(Result.Failure<int, IDomainError>(error));
 
             // Act
             var response = await _controller.Ingest(request);
@@ -102,12 +111,10 @@ namespace AppointmentIngestion.Tests.Unit.ControllerTests
         public async Task GetAll_WhenSuccess_ShouldReturnOk()
         {
             // Arrange
-            var items = new List<AppointmentResponseDto>
-            {
-                new AppointmentResponseDto { Id = 1, ClientName = "John" }
-            };
+            var items = AppointmentResponseDtoData.ValidAppointments;
 
-            _service.GetAllAsync().Returns(Task.FromResult(Result.Success<IReadOnlyList<AppointmentResponseDto>, IDomainError>(items)));
+            _service.GetAllAsync()
+                        .Returns(Task.FromResult(Result.Success<IReadOnlyList<AppointmentResponseDto>, IDomainError>(items)));
 
             // Act
             var response = await _controller.GetAll();
@@ -124,10 +131,13 @@ namespace AppointmentIngestion.Tests.Unit.ControllerTests
         {
             // Arrange
             var error = Substitute.For<IDomainError>();
-            error.ErrorType.Returns(ErrorType.Unexpected);
-            error.ErrorMessage.Returns("Unexpected error");
+            var unexpectedError = ErrorType.Unexpected;
 
-            _service.GetAllAsync().Returns(Result.Failure<IReadOnlyList<AppointmentResponseDto>, IDomainError>(error));
+            error.ErrorType.Returns(unexpectedError);
+            error.ErrorMessage.Returns(unexpectedError.Name);
+
+            _service.GetAllAsync()
+                        .Returns(Result.Failure<IReadOnlyList<AppointmentResponseDto>, IDomainError>(error));
 
             // Act
             var response = await _controller.GetAll();
@@ -145,12 +155,13 @@ namespace AppointmentIngestion.Tests.Unit.ControllerTests
         public async Task GetById_WhenSuccess_ShouldReturnOk()
         {
             // Arrange
-            var appointment = new AppointmentResponseDto { Id = 5, ClientName = "Sarah" };
+            var appointment = AppointmentResponseDtoData.ValidAppointments[0];
 
-            _service.GetByIdAsync(5).Returns(Result.Success<AppointmentResponseDto,IDomainError>(appointment));
+            _service.GetByIdAsync(appointment.Id)
+                        .Returns(Result.Success<AppointmentResponseDto,IDomainError>(appointment));
 
             // Act
-            var response = await _controller.GetById(5);
+            var response = await _controller.GetById(appointment.Id);
 
             // Assert
             response.Should().BeOfType<OkObjectResult>();
@@ -164,13 +175,17 @@ namespace AppointmentIngestion.Tests.Unit.ControllerTests
         {
             // Arrange
             var error = Substitute.For<IDomainError>();
-            error.ErrorType.Returns(ErrorType.NotFound);
-            error.ErrorMessage.Returns("Not found");
+            var notFoundError = ErrorType.NotFound;
 
-            _service.GetByIdAsync(10).Returns(Result.Failure<AppointmentResponseDto,IDomainError>(error));
+            error.ErrorType.Returns(notFoundError);
+            error.ErrorMessage.Returns(notFoundError.Name);
+            int appointmentId = AppointmentResponseDtoData.AppointmentId;
+
+            _service.GetByIdAsync(appointmentId)
+                        .Returns(Result.Failure<AppointmentResponseDto,IDomainError>(error));
 
             // Act
-            var response = await _controller.GetById(10);
+            var response = await _controller.GetById(appointmentId);
 
             // Assert
             response.Should().BeOfType<NotFoundObjectResult>();

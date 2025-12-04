@@ -10,5 +10,7 @@ namespace AppointmentIngestion.Tests.Data
                 new AppointmentResponseDto { Id = 1 },
                 new AppointmentResponseDto { Id = 2 }
          };
+
+        public static int AppointmentId = 10;
     }
 }
