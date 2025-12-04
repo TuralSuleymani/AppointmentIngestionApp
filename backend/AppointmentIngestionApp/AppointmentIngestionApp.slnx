@@ -1,6 +1,6 @@
 <Solution>
   <Folder Name="/src/">
-    <Project Path="AppointmentIngestion.Common/AppointmentIngestion.Common.csproj" Id="09575420-f2a9-4829-bd3d-9852e79e07c7" />
+    <Project Path="src/AppointmentIngestion.Common/AppointmentIngestion.Common.csproj" Id="09575420-f2a9-4829-bd3d-9852e79e07c7" />
     <Project Path="src/AppointmentIngestion.Api/AppointmentIngestion.Api.csproj" />
     <Project Path="src/AppointmentIngestion.Repositories/AppointmentIngestion.Repositories.csproj" />
     <Project Path="src/AppointmentIngestion.Services/AppointmentIngestion.Services.csproj" />

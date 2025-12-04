@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\AppointmentIngestion.Common\AppointmentIngestion.Common.csproj" />
+    <ProjectReference Include="..\AppointmentIngestion.Common\AppointmentIngestion.Common.csproj" />
     <ProjectReference Include="..\AppointmentIngestion.Repositories\AppointmentIngestion.Repositories.csproj" />
   </ItemGroup>
 
