@@ -1,6 +1,7 @@
 ﻿using AppointmentIngestion.Repositories.Contracts;
 using AppointmentIngestion.Repositories.Models;
 using AppointmentIngestion.Services.Contracts;
+using AppointmentIngestion.Services.DTOs;
 using AppointmentIngestion.Services.Implementations;
 using AppointmentIngestion.Services.Validation;
 using AppointmentIngestion.Tests.Data;
@@ -111,7 +112,7 @@ namespace AppointmentIngestion.Tests.Unit.Services
         public async Task IngestAsync_WhenAllRulesAreValid_ShouldIngest()
         {
             //Arrange
-            int validId = AppointmentData.ValidAppointmentId;
+            int id = AppointmentData.ValidAppointmentId;
 
             var validTime = DateTime.UtcNow.AddMinutes(10)
                 .AddSeconds(-DateTime.UtcNow.AddMinutes(10).Second)
@@ -119,7 +120,7 @@ namespace AppointmentIngestion.Tests.Unit.Services
 
             var request = AppointmentRequestDtoFactory.Create(appointmentTime: validTime);
 
-            var entity = new Appointment { Id = validId };
+            var entity = new Appointment { Id = id };
 
             _mapper.Map<Appointment>(request).Returns(entity);
 
@@ -130,9 +131,83 @@ namespace AppointmentIngestion.Tests.Unit.Services
 
             //Assert
             result.IsSuccess.Should().BeTrue();
-            validId.Should().Be(result.Value);
+            id.Should().Be(result.Value);
 
             await _repository.Received(1).AddAsync(entity);
+        }
+
+        [Fact]
+        public async Task GetByIdAsync_WhenAppointmentNotFound_ShouldFail()
+        {
+            // Arrange
+            int id = AppointmentData.ValidAppointmentId;
+
+            _repository.GetByIdAsync(id).Returns((Appointment?)null);
+
+            // Act
+            var result = await _service.GetByIdAsync(id);
+
+            // Assert
+            result.IsFailure.Should().BeTrue();
+            result.Error.ErrorMessage.Should().Be($"Appointment with ID {id} was not found.");
+        }
+
+        [Fact]
+        public async Task GetByIdAsync_WhenAppointmentExists_ShouldReturnDto()
+        {
+            // Arrange
+            int id = AppointmentData.ValidAppointmentId;
+
+            var entity = new Appointment { Id = id };
+            var dto = new AppointmentResponseDto { Id = id };
+
+            _repository.GetByIdAsync(id).Returns(entity);
+            _mapper.Map<AppointmentResponseDto>(entity).Returns(dto);
+
+            // Act
+            var result = await _service.GetByIdAsync(id);
+
+            // Assert
+            result.IsSuccess.Should().BeTrue();
+            result.Value.Id.Should().Be(id);
+        }
+
+        [Fact]
+        public async Task GetAllAsync_WhenAppointmentsExist_ShouldReturnDtos()
+        {
+            // Arrange
+            var entities = AppointmentData.ValidAppointments;
+
+            var dtos = AppointmentResponseDtoData.ValidAppointments;
+
+            int appointmentCount = dtos.Count;
+            _repository.GetAllAsync().Returns(entities);
+            _mapper.Map<IReadOnlyList<AppointmentResponseDto>>(entities).Returns(dtos);
+
+            // Act
+            var result = await _service.GetAllAsync();
+
+            // Assert
+            result.IsSuccess.Should().BeTrue();
+            result.Value.Count.Should().Be(appointmentCount);
+        }
+
+        [Fact]
+        public async Task GetAllAsync_WhenNoAppointmentsExist_ShouldReturnEmptyList()
+        {
+            // Arrange
+            var entities = new List<Appointment>();
+            var dtos = new List<AppointmentResponseDto>();
+
+            _repository.GetAllAsync().Returns(entities);
+            _mapper.Map<IReadOnlyList<AppointmentResponseDto>>(entities).Returns(dtos);
+
+            // Act
+            var result = await _service.GetAllAsync();
+
+            // Assert
+            result.IsSuccess.Should().BeTrue();
+            result.Value.Should().BeEmpty();
         }
 
 

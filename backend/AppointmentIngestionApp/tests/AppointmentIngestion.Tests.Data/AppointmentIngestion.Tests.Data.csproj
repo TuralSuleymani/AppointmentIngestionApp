@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\AppointmentIngestion.Repositories\AppointmentIngestion.Repositories.csproj" />
+    <ProjectReference Include="..\..\src\AppointmentIngestion.Services\AppointmentIngestion.Services.csproj" />
+  </ItemGroup>
+
 </Project>
