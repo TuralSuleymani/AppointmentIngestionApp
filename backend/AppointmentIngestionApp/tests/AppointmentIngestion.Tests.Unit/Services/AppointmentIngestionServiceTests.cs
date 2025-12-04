@@ -114,9 +114,9 @@ namespace AppointmentIngestion.Tests.Unit.Services
             //Arrange
             int id = AppointmentData.ValidAppointmentId;
 
-            var validTime = DateTime.UtcNow.AddMinutes(10)
-                .AddSeconds(-DateTime.UtcNow.AddMinutes(10).Second)
-                .AddMinutes(-(DateTime.UtcNow.AddMinutes(10).Minute % 30)); // normalize to 0 or 30
+            var validTime = _datetimeProvider.UtcNow.AddMinutes(10)
+                .AddSeconds(-_datetimeProvider.UtcNow.AddMinutes(10).Second)
+                .AddMinutes(-(_datetimeProvider.UtcNow.AddMinutes(10).Minute % 30)); // normalize to 0 or 30
 
             var request = AppointmentRequestDtoFactory.Create(appointmentTime: validTime);
 
