@@ -7,6 +7,7 @@ using AutoMapper;
 using CSharpFunctionalExtensions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
+using Serilog.Core;
 namespace AppointmentIngestion.Services.Implementations;
 
 public class AppointmentIngestionService : IAppointmentIngestionService
@@ -50,11 +51,11 @@ public class AppointmentIngestionService : IAppointmentIngestionService
         }
 
         var appointment = _mapper.Map<Appointment>(request);
-        
+
         _logger.LogDebug("Mapped Appointment entity: {@Appointment}", appointment);
 
         var saved = await _repository.AddAsync(appointment);
-        
+
         _logger.LogInformation("Appointment created successfully with ID {Id}", saved.Id);
 
         return Result.Success<int, IDomainError>(saved.Id);
@@ -62,9 +63,20 @@ public class AppointmentIngestionService : IAppointmentIngestionService
 
     public async Task<Result<IReadOnlyList<AppointmentResponseDto>, IDomainError>> GetAllAsync()
     {
+        _logger.LogInformation("Fetching all appointments from repository");
+
         var items = await _repository.GetAllAsync();
 
+        _logger.LogInformation(
+        "Retrieved {Count} appointments from repository",
+        items.Count
+        );
+
+        _logger.LogDebug("Repository returned appointments: {@Appointments}", items);
+
         var dtos = _mapper.Map<IReadOnlyList<AppointmentResponseDto>>(items);
+
+        _logger.LogDebug("Mapped to response DTOs: {@Dtos}", dtos);
 
         return Result.Success<IReadOnlyList<AppointmentResponseDto>, IDomainError>(dtos);
     }
