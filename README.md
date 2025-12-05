@@ -210,11 +210,11 @@ To better understand  the concepts mentioned in this repository, check out these
 
 ## ⏱️ Time Breakdown
 
-**Total Time: ~12 hours**
+**Total Time: ~13 hours**
 
 | Task | Duration | Details |
 |------|----------|---------|
 | **Backend Development** | 5.5 hours | - Project structure setup<br>- Domain entities and repositories<br>- Service layer with validation<br>- API controllers and error handling<br>- Problem Details integration |
 | **Frontend Development** | 3 hours | - React + TypeScript setup<br>- Component architecture<br>- API integration with type safety<br>- Form validation with Zod<br>- Responsive UI with Tailwind |
 | **Testing** | 2.5 hour | - Unit tests for services<br>- Controller tests with mocking<br>- Validation tests<br>- Test fixtures and data |
-| **Documentation** | 0.5 hours | - README.md<br>- JUSTIFICATION.md<br>- Code comments<br>- API documentation |
+| **Documentation** | 1 hour | - README.md<br>- JUSTIFICATION.md<br>- Code comments<br>- API documentation |
