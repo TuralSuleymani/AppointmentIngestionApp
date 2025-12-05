@@ -25,16 +25,16 @@ namespace AppointmentIngestion.Tests.Unit.ServiceTests
         {
             _repository = Substitute.For<IAppointmentRepository>();
             _mapper = Substitute.For<IMapper>();
-            _datetimeProvider = GetDatetimeProvider();
+            _datetimeProvider = CreateDatetimeProvider();
             _validator = new AppointmentRequestValidator(_datetimeProvider);
             _logger = Substitute.For<ILogger<AppointmentIngestionService>>();
             _service = new AppointmentIngestionService(_repository, _validator, _mapper,_logger);
         }
 
-        private static IDateTimeProvider GetDatetimeProvider()
+        private static IDateTimeProvider CreateDatetimeProvider()
         {
             var datetimeProvider = Substitute.For<IDateTimeProvider>();
-            datetimeProvider.UtcNow.Returns(new DateTime(2025, 1, 1, 1, 0, 0, DateTimeKind.Utc));
+            datetimeProvider.UtcNow.Returns(DatetimeProviderData.InitialUtcDatetime);
             return datetimeProvider;
         }
 
@@ -79,7 +79,7 @@ namespace AppointmentIngestion.Tests.Unit.ServiceTests
         public async Task IngestAsync_WhenAppointmentNot5MinutesInFuture_ShouldFail(int minute)
         {
             //Arrange
-            var request = AppointmentRequestDtoFactory.Create(_datetimeProvider, appointmentTime: GetDatetimeProvider().UtcNow.AddMinutes(minute));
+            var request = AppointmentRequestDtoFactory.Create(_datetimeProvider, appointmentTime: CreateDatetimeProvider().UtcNow.AddMinutes(minute));
 
             //Act
             var result = await _service.IngestAsync(request);

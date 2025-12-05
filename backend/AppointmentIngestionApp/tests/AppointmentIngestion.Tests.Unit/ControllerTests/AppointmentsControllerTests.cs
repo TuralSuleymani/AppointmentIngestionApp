@@ -7,6 +7,7 @@ using AppointmentIngestion.Tests.Data;
 using CSharpFunctionalExtensions;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Logging;
@@ -19,7 +20,6 @@ namespace AppointmentIngestion.Tests.Unit.ControllerTests
         private readonly IAppointmentIngestionService _service;
         private readonly ILogger<AppointmentsController> _logger;
         private readonly AppointmentsController _controller;
-        private readonly int _badRequestStatusCode = 400;
 
         public AppointmentsControllerTests()
         {
@@ -70,6 +70,7 @@ namespace AppointmentIngestion.Tests.Unit.ControllerTests
             response.Should().BeOfType<CreatedAtActionResult>();
             var created = response as CreatedAtActionResult;
 
+            created!.StatusCode.Should().Be(StatusCodes.Status201Created);
             created!.ActionName.Should().Be(nameof(AppointmentsController.GetById));
             created.RouteValues![nameof(id)].Should().Be(id);
             created.Value.Should().BeEquivalentTo(new
@@ -102,7 +103,7 @@ namespace AppointmentIngestion.Tests.Unit.ControllerTests
             response.Should().BeOfType<BadRequestObjectResult>();
             var obj = response as BadRequestObjectResult;
 
-            obj!.StatusCode.Should().Be(_badRequestStatusCode);
+            obj!.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
 
             obj.Value.Should().NotBeNull();
         }
@@ -123,6 +124,7 @@ namespace AppointmentIngestion.Tests.Unit.ControllerTests
             response.Should().BeOfType<OkObjectResult>();
             var ok = response as OkObjectResult;
 
+            ok!.StatusCode.Should().Be(StatusCodes.Status200OK);
             ok!.Value.Should().BeEquivalentTo(items);
         }
 
@@ -146,7 +148,7 @@ namespace AppointmentIngestion.Tests.Unit.ControllerTests
             response.Should().BeOfType<BadRequestObjectResult>();
             var obj = response as BadRequestObjectResult;
 
-            obj!.StatusCode.Should().Be(_badRequestStatusCode);
+            obj!.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
 
             obj.Value.Should().NotBeNull();
         }
@@ -167,6 +169,7 @@ namespace AppointmentIngestion.Tests.Unit.ControllerTests
             response.Should().BeOfType<OkObjectResult>();
             var ok = response as OkObjectResult;
 
+            ok!.StatusCode.Should().Be(StatusCodes.Status200OK);
             ok!.Value.Should().BeEquivalentTo(appointment);
         }
 
@@ -191,7 +194,7 @@ namespace AppointmentIngestion.Tests.Unit.ControllerTests
             response.Should().BeOfType<NotFoundObjectResult>();
             var obj = response as NotFoundObjectResult;
 
-            obj!.StatusCode.Should().Be(404);
+            obj!.StatusCode.Should().Be(StatusCodes.Status404NotFound);
         }
 
     }
