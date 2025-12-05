@@ -8,6 +8,7 @@ using AppointmentIngestion.Tests.Data;
 using AppointmentIngestion.Tests.Unit.Factories;
 using AutoMapper;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using NSubstitute;
 
 namespace AppointmentIngestion.Tests.Unit.ServiceTests
@@ -19,14 +20,15 @@ namespace AppointmentIngestion.Tests.Unit.ServiceTests
         private readonly IDateTimeProvider _datetimeProvider;
         private readonly AppointmentRequestValidator _validator;
         private readonly AppointmentIngestionService _service;
-
+        private readonly ILogger<AppointmentIngestionService> _logger;
         public AppointmentIngestionServiceTests()
         {
             _repository = Substitute.For<IAppointmentRepository>();
             _mapper = Substitute.For<IMapper>();
             _datetimeProvider = GetDatetimeProvider();
             _validator = new AppointmentRequestValidator(_datetimeProvider);
-            _service = new AppointmentIngestionService(_repository, _validator, _mapper);
+            _logger = Substitute.For<ILogger<AppointmentIngestionService>>();
+            _service = new AppointmentIngestionService(_repository, _validator, _mapper,_logger);
         }
 
         private static IDateTimeProvider GetDatetimeProvider()
