@@ -2,7 +2,7 @@
 
 namespace AppointmentIngestion.Tests.Data
 {
-    public class InvalidAppointmentTimesData : IEnumerable<object[]>
+    public class InvalidAppointmentDatesData : IEnumerable<object[]>
     {
         public IEnumerator<object[]> GetEnumerator()
         {

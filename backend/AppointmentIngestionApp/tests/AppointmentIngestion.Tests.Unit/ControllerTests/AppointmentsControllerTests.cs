@@ -76,7 +76,7 @@
 
             error.ErrorType.Returns(validationError);
             error.ErrorMessage.Returns(validationError.Name);
-            error.Errors.Returns([ValidationErrors.AppointmentTimeSlot]);
+            error.Errors.Returns([ValidationErrors.AppointmentDateSlot]);
 
             _service.IngestAsync(request)
                         .Returns(Result.Failure<int, IDomainError>(error));

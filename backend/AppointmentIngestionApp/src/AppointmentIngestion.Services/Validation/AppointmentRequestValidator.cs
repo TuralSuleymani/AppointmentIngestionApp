@@ -13,12 +13,12 @@ namespace AppointmentIngestion.Services.Validation
             RuleFor(x => x.ClientName)
                 .NotEmpty().WithMessage(ValidationErrors.ClientNameRequired);
 
-            RuleFor(x => x.AppointmentTime)
-                .NotNull().WithMessage(ValidationErrors.AppointmentTimeRequired)
+            RuleFor(x => x.AppointmentDate)
+                .NotNull().WithMessage(ValidationErrors.AppointmentDateRequired)
                 .Must(BeAtLeast5MinutesInFuture)
-                .WithMessage(ValidationErrors.AppointmentTimeFuture)
+                .WithMessage(ValidationErrors.AppointmentDateFuture)
                 .Must(StartOnHourOrHalfHour)
-                .WithMessage(ValidationErrors.AppointmentTimeSlot);
+                .WithMessage(ValidationErrors.AppointmentDateSlot);
 
             RuleFor(x => x.ServiceDurationMinutes)
                 .GreaterThan(0)

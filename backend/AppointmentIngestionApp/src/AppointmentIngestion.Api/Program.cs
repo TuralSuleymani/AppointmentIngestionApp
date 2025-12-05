@@ -25,6 +25,19 @@ namespace AppointmentIngestion.Api
                 .AddServicesLayer()
                 .AddAutoMapper(typeof(AppointmentProfile).Assembly);
 
+            var corsPolicyName = "FrontendPolicy";
+            // CORS for your React app on http://localhost:5173
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy(corsPolicyName, policy =>
+                {
+                    policy.WithOrigins("http://localhost:3000")
+                          .AllowAnyHeader()
+                          .AllowAnyMethod()
+                          .AllowCredentials();
+                });
+            });
+
             var app = builder.Build();
 
             if (app.Environment.IsDevelopment())
@@ -36,6 +49,7 @@ namespace AppointmentIngestion.Api
             app.UseSerilogRequestLogging();
 
             app.UseHttpsRedirection();
+            app.UseCors(corsPolicyName);
             app.UseAuthorization();
 
             app.MapControllers();

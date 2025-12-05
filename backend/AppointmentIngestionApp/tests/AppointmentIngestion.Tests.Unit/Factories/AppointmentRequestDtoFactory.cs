@@ -7,11 +7,11 @@ namespace AppointmentIngestion.Tests.Unit.Factories
     public static class AppointmentRequestDtoFactory
     {
         public static AppointmentRequestDto Create(IDateTimeProvider datetimeProvider, string? clientName = null,
-            DateTime? appointmentTime = null, int? serviceDurationMinutes = null)
+            DateTime? AppointmentDate = null, int? serviceDurationMinutes = null)
             => new()
             {
                 ClientName = clientName ?? AppointmentRequestDtoData.ValidCustomer,
-                AppointmentTime = appointmentTime ?? AppointmentRequestDtoData.ValidAppointmentTime(datetimeProvider),
+                AppointmentDate = AppointmentDate ?? AppointmentRequestDtoData.ValidAppointmentDate(datetimeProvider),
                 ServiceDurationMinutes = serviceDurationMinutes ?? AppointmentRequestDtoData.ValidServiceDurationMinutes
             };
     }

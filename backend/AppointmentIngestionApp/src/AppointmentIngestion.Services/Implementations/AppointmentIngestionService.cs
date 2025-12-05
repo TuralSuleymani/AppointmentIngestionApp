@@ -32,7 +32,7 @@ public class AppointmentIngestionService : IAppointmentIngestionService
     {
         _logger.LogInformation("Ingesting new appointment for {ClientName} at {Time}",
         request.ClientName,
-        request.AppointmentTime);
+        request.AppointmentDate);
 
         var validation = await _validator.ValidateAsync(request);
 

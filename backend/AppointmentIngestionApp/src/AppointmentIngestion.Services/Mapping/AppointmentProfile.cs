@@ -12,8 +12,8 @@ namespace AppointmentIngestion.Services.Mapping
             // DTO2Domain
             CreateMap<AppointmentRequestDto, Appointment>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
-                .ForMember(dest => dest.AppointmentTime,
-                    opt => opt.MapFrom(src => src.AppointmentTime.NormalizeToUtc()))
+                .ForMember(dest => dest.AppointmentDate,
+                    opt => opt.MapFrom(src => src.AppointmentDate.NormalizeToUtc()))
                 .ForMember(dest => dest.ServiceDurationMinutes,
                     opt => opt.MapFrom(src => src.ServiceDurationMinutes ?? 30));
 

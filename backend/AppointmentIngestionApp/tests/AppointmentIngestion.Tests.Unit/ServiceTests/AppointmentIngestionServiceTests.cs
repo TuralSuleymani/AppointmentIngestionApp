@@ -42,18 +42,18 @@
         }
 
         [Theory]
-        [ClassData(typeof(InvalidAppointmentTimesData))]
-        public async Task IngestAsync_WhenAppointmentTimeIsNotValid_ShouldFail(DateTime appointment)
+        [ClassData(typeof(InvalidAppointmentDatesData))]
+        public async Task IngestAsync_WhenAppointmentDateIsNotValid_ShouldFail(DateTime appointment)
         {
             //Arrange
-            var request = AppointmentRequestDtoFactory.Create(_datetimeProvider, appointmentTime: appointment);
+            var request = AppointmentRequestDtoFactory.Create(_datetimeProvider, AppointmentDate: appointment);
 
             //Act
             var result = await _service.IngestAsync(request);
 
             //Assert
             result.IsFailure.Should().BeTrue();
-            result.Error.Errors.Should().Contain(ValidationErrors.AppointmentTimeSlot);
+            result.Error.Errors.Should().Contain(ValidationErrors.AppointmentDateSlot);
 
             await _repository.DidNotReceive().AddAsync(Arg.Any<Appointment>());
         }
@@ -66,14 +66,14 @@
         public async Task IngestAsync_WhenAppointmentNot5MinutesInFuture_ShouldFail(int minute)
         {
             //Arrange
-            var request = AppointmentRequestDtoFactory.Create(_datetimeProvider, appointmentTime: CreateDatetimeProvider().UtcNow.AddMinutes(minute));
+            var request = AppointmentRequestDtoFactory.Create(_datetimeProvider, AppointmentDate: CreateDatetimeProvider().UtcNow.AddMinutes(minute));
 
             //Act
             var result = await _service.IngestAsync(request);
 
             //Assert
             result.IsFailure.Should().BeTrue();
-            result.Error.Errors.Should().Contain(ValidationErrors.AppointmentTimeFuture);
+            result.Error.Errors.Should().Contain(ValidationErrors.AppointmentDateFuture);
 
             await _repository.DidNotReceive().AddAsync(Arg.Any<Appointment>());
         }

@@ -3,7 +3,7 @@
     public class AppointmentRequestDto
     {
         public string ClientName { get; set; }
-        public DateTime AppointmentTime { get; set; }
+        public DateTime AppointmentDate { get; set; }
         public int? ServiceDurationMinutes { get; set; }
     }
 }
