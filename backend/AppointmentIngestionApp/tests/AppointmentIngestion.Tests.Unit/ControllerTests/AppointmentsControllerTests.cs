@@ -1,19 +1,4 @@
-﻿using AppointmentIngestion.API.Controllers;
-using AppointmentIngestion.Common;
-using AppointmentIngestion.Services.Contracts;
-using AppointmentIngestion.Services.DTOs;
-using AppointmentIngestion.Services.Validation;
-using AppointmentIngestion.Tests.Data;
-using CSharpFunctionalExtensions;
-using FluentAssertions;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.Extensions.Logging;
-using NSubstitute;
-
-namespace AppointmentIngestion.Tests.Unit.ControllerTests
+﻿namespace AppointmentIngestion.Tests.Unit.ControllerTests
 {
     public class AppointmentsControllerTests
     {

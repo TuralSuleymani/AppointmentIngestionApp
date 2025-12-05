@@ -1,17 +1,4 @@
-﻿using AppointmentIngestion.Repositories.Contracts;
-using AppointmentIngestion.Repositories.Models;
-using AppointmentIngestion.Services.Contracts;
-using AppointmentIngestion.Services.DTOs;
-using AppointmentIngestion.Services.Implementations;
-using AppointmentIngestion.Services.Validation;
-using AppointmentIngestion.Tests.Data;
-using AppointmentIngestion.Tests.Unit.Factories;
-using AutoMapper;
-using FluentAssertions;
-using Microsoft.Extensions.Logging;
-using NSubstitute;
-
-namespace AppointmentIngestion.Tests.Unit.ServiceTests
+﻿namespace AppointmentIngestion.Tests.Unit.ServiceTests
 {
     public class AppointmentIngestionServiceTests
     {
