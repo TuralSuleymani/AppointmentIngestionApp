@@ -57,8 +57,8 @@ dotnet run
 
 
 The API will start at:
-- **HTTP**: `http://localhost:5000`
-- **Swagger UI**: `http://localhost:5000/swagger`
+- **Url**: `localhost:7104`
+- **Swagger UI**: `http://localhost:7104/swagger`
 
 ### Alternative: Run from Visual Studio
 1. Open `AppointmentIngestionApp.sln`
